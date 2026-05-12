@@ -1,0 +1,128 @@
+{
+  "validation_rules": {
+    "multiple_choice": {
+      "description": "User must select one of the provided options",
+      "error_message": "Please select one of the available options"
+    },
+    "text": {
+      "description": "User provides free-form text input",
+      "min_length": 3,
+      "max_length": 200,
+      "error_message_empty": "This field is required",
+      "error_message_too_short": "Please provide at least {min_length} characters",
+      "error_message_too_long": "Please keep your response under {max_length} characters"
+    },
+    "required": {
+      "description": "Field must not be empty",
+      "error_message": "This field is required"
+    }
+  },
+  "question_specific_rules": {
+    "1": {
+      "type": "multiple_choice",
+      "required": true,
+      "valid_options": [
+        "Casual everyday wear",
+        "Formal event (wedding, gala)",
+        "Business/Professional",
+        "Party/Night out",
+        "Sports/Gym",
+        "Beach/Vacation",
+        "Date night"
+      ]
+    },
+    "2": {
+      "type": "multiple_choice",
+      "required": true,
+      "valid_options": [
+        "Modern/Contemporary",
+        "Classic/Traditional",
+        "Bohemian/Boho",
+        "Minimalist",
+        "Streetwear/Urban",
+        "Vintage/Retro",
+        "Elegant/Sophisticated"
+      ]
+    },
+    "3": {
+      "type": "text",
+      "required": true,
+      "min_length": 3,
+      "max_length": 100
+    },
+    "4": {
+      "type": "multiple_choice",
+      "required": true,
+      "valid_options": [
+        "Slim/Petite",
+        "Athletic/Fit",
+        "Curvy/Hourglass",
+        "Plus size",
+        "Tall",
+        "Average",
+        "Prefer not to say"
+      ]
+    },
+    "5": {
+      "type": "multiple_choice",
+      "required": true,
+      "valid_options": [
+        "Summer (Hot)",
+        "Winter (Cold)",
+        "Spring (Mild)",
+        "Fall/Autumn (Cool)",
+        "Rainy",
+        "Tropical"
+      ]
+    },
+    "6": {
+      "type": "multiple_choice",
+      "required": true,
+      "valid_options": [
+        "Budget-friendly (Under $50)",
+        "Moderate ($50-$150)",
+        "Mid-range ($150-$300)",
+        "Premium ($300-$500)",
+        "Luxury ($500+)",
+        "No specific budget"
+      ]
+    },
+    "7": {
+      "type": "multiple_choice",
+      "required": true,
+      "valid_options": [
+        "Dresses/Skirts",
+        "Pants/Jeans",
+        "Shorts",
+        "Traditional wear",
+        "Mix of both casual and formal",
+        "Comfortable loungewear"
+      ]
+    },
+    "8": {
+      "type": "text",
+      "required": false,
+      "min_length": 0,
+      "max_length": 100
+    },
+    "9": {
+      "type": "multiple_choice",
+      "required": true,
+      "valid_options": [
+        "Minimal accessories",
+        "Statement jewelry",
+        "Scarves/Hats",
+        "Bags/Purses",
+        "Watches",
+        "Sunglasses",
+        "All of the above"
+      ]
+    },
+    "10": {
+      "type": "text",
+      "required": false,
+      "min_length": 0,
+      "max_length": 200
+    }
+  }
+}

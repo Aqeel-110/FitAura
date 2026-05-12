@@ -1,0 +1,272 @@
+{% extends "base.html" %}
+
+{% block title %}Profile - OutfitAI{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/chatbot.css') }}">
+<style>
+    .profile-page {
+        display: flex;
+        min-height: 100vh;
+    }
+    
+    .profile-content {
+        flex: 1;
+        padding: var(--spacing-xl);
+        overflow-y: auto;
+    }
+    
+    .profile-header {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        padding: var(--spacing-xl);
+        margin-bottom: var(--spacing-xl);
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-xl);
+    }
+    
+    .profile-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        color: var(--primary-bg);
+        flex-shrink: 0;
+    }
+    
+    .profile-info {
+        flex: 1;
+    }
+    
+    .profile-name {
+        font-size: 2rem;
+        margin-bottom: var(--spacing-xs);
+    }
+    
+    .profile-email {
+        color: var(--text-secondary);
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .profile-meta {
+        display: flex;
+        gap: var(--spacing-md);
+        color: var(--text-muted);
+        font-size: 0.875rem;
+    }
+    
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: var(--spacing-md);
+        margin-bottom: var(--spacing-xl);
+    }
+    
+    .stat-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        padding: var(--spacing-md);
+        text-align: center;
+        transition: all var(--transition-fast);
+    }
+    
+    .stat-card:hover {
+        border-color: var(--primary-accent);
+        transform: translateY(-4px);
+    }
+    
+    .stat-icon {
+        font-size: 2rem;
+        color: var(--primary-accent);
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .stat-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 0.25rem;
+    }
+    
+    .stat-label {
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+    }
+    
+    .section-title {
+        font-size: 1.5rem;
+        margin-bottom: var(--spacing-md);
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+    }
+    
+    .preferences-list {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+    }
+    
+    .preference-item {
+        padding: var(--spacing-md);
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .preference-item:last-child {
+        border-bottom: none;
+    }
+    
+    .preference-question {
+        color: var(--text-muted);
+        font-size: 0.875rem;
+        margin-bottom: 0.25rem;
+    }
+    
+    .preference-answer {
+        color: var(--text-primary);
+        font-weight: 500;
+    }
+    
+    .preference-date {
+        color: var(--text-muted);
+        font-size: 0.75rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="profile-page">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <a href="{{ url_for('index') }}" class="brand-logo">
+                <i class="fas fa-sparkles"></i>
+                <span>Outfit<span class="brand-accent">AI</span></span>
+            </a>
+        </div>
+
+        <div class="sidebar-user">
+            <div class="user-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="user-info">
+                <div class="user-name">{{ current_user.username if current_user.is_authenticated else 'User' }}</div>
+                <div class="user-status">
+                    <span class="status-dot"></span>
+                    <span>Online</span>
+                </div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="{{ url_for('chatbot.chat_interface') }}" class="nav-item">
+                <i class="fas fa-comments"></i>
+                <span>New Chat</span>
+            </a>
+            <a href="{{ url_for('recommendations.view_recommendations') }}" class="nav-item">
+                <i class="fas fa-bookmark"></i>
+                <span>Saved Outfits</span>
+            </a>
+            <a href="{{ url_for('recommendations.profile') }}" class="nav-item active">
+                <i class="fas fa-user-circle"></i>
+                <span>Profile</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="{{ url_for('auth.logout') }}" class="nav-item logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="profile-content">
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="profile-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="profile-info">
+                <h1 class="profile-name">{{ user.username if user else 'User' }}</h1>
+                <div class="profile-email">{{ user.email if user else 'user@example.com' }}</div>
+                <div class="profile-meta">
+                    <span><i class="fas fa-calendar"></i> Joined {{ user.created_at if user else 'Recently' }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-bookmark"></i>
+                </div>
+                <div class="stat-value">{{ recommendation_count if recommendation_count is defined else 0 }}</div>
+                <div class="stat-label">Saved Outfits</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <div class="stat-value">{{ (recommendation_count * 10) if recommendation_count is defined else 0 }}</div>
+                <div class="stat-label">Questions Answered</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="stat-value">{{ recommendation_count if recommendation_count is defined else 0 }}</div>
+                <div class="stat-label">Style Sessions</div>
+            </div>
+        </div>
+
+        <!-- Recent Preferences -->
+        {% if recent_preferences and recent_preferences|length > 0 %}
+        <div>
+            <h2 class="section-title">
+                <i class="fas fa-history"></i>
+                Recent Preferences
+            </h2>
+            <div class="preferences-list">
+                {% for pref in recent_preferences %}
+                <div class="preference-item">
+                    <div>
+                        <div class="preference-question">{{ pref.question_text }}</div>
+                        <div class="preference-answer">{{ pref.answer }}</div>
+                    </div>
+                    <div class="preference-date">{{ pref.timestamp }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Quick Actions -->
+        <div style="margin-top: var(--spacing-xl); display: flex; gap: var(--spacing-md);">
+            <a href="{{ url_for('chatbot.chat_interface') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i>
+                <span>Start New Chat</span>
+            </a>
+            <a href="{{ url_for('recommendations.view_recommendations') }}" class="btn btn-secondary">
+                <i class="fas fa-bookmark"></i>
+                <span>View Saved Outfits</span>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

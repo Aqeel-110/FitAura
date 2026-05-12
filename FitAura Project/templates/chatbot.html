@@ -1,0 +1,523 @@
+{% extends "base.html" %}
+
+{% block title %}Style Assistant - {{ app_name }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/chatbot.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="chatbot-page">
+    <!-- Guest Banner -->
+    {% if is_guest %}
+    <div class="guest-banner">
+        <div class="guest-banner-content">
+            <i class="fas fa-info-circle"></i>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <a href="{{ url_for('index') }}" class="brand-logo">
+                <i class="fas fa-sparkles"></i>
+                <span>Fit<span class="brand-accent">Aura</span></span>
+            </a>
+        </div>
+
+        <div class="sidebar-user">
+            <div class="user-avatar">
+                <i class="fas fa-{{ 'user-circle' if is_guest else 'user' }}"></i>
+            </div>
+            <div class="user-info">
+                <div class="user-name">{{ 'Guest User' if is_guest else current_user.username }}</div>
+                <div class="user-status">
+                    <span class="status-dot"></span>
+                    <span>Online</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Workflow Mode Selector -->
+        <div class="workflow-selector">
+            <h4>Choose Workflow</h4>
+            <button class="workflow-btn active" data-workflow="generate" onclick="selectWorkflow('generate')">
+                <i class="fas fa-magic"></i>
+                <span>Generate Outfit</span>
+            </button>
+            <button class="workflow-btn" data-workflow="analyze" onclick="selectWorkflow('analyze')">
+                <i class="fas fa-camera"></i>
+                <span>Analyze Image</span>
+            </button>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="{{ url_for('chatbot.chat_interface') }}" class="nav-item active">
+                <i class="fas fa-comments"></i>
+                <span>New Chat</span>
+            </a>
+            {% if not is_guest %}
+            <a href="{{ url_for('recommendations.view_recommendations') }}" class="nav-item">
+                <i class="fas fa-bookmark"></i>
+                <span>Saved Outfits</span>
+            </a>
+            <a href="{{ url_for('recommendations.profile') }}" class="nav-item">
+                <i class="fas fa-user-circle"></i>
+                <span>Profile</span>
+            </a>
+            {% else %}
+            <button onclick="showGuestLimitModal()" class="nav-item nav-item-disabled">
+                <i class="fas fa-bookmark"></i>
+                <span>Saved Outfits</span>
+                <i class="fas fa-lock" style="margin-left: auto; font-size: 0.8em;"></i>
+            </button>
+            {% endif %}
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="{{ url_for('auth.logout') }}" class="nav-item logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>{{ 'End Session' if is_guest else 'Logout' }}</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Chat Area -->
+    <div class="chat-main">
+        <!-- Chat Header -->
+        <div class="chat-header">
+            <div class="chat-header-content">
+                <div class="bot-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="bot-info">
+                    <h2 class="bot-name">FitAura AI</h2>
+                    <p class="bot-status">
+                        <span class="typing-indicator" style="display: none;">
+                            <span></span><span></span><span></span>
+                        </span>
+                        <span class="status-text">Ready to help you find your perfect style</span>
+                    </p>
+                </div>
+            </div>
+            <div class="chat-actions">
+                <button class="btn-icon" onclick="startNewChat()" title="New Chat">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Chat Messages Container -->
+        <div class="chat-messages" id="chatMessages">
+            <!-- Welcome Message -->
+            <div class="message-group bot">
+                <div class="message-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        <p>👋 Hello! I'm FitAura, your AI style companion.</p>
+                        <p><strong>Choose a workflow:</strong></p>
+                        <ul>
+                            <li>✨ <strong>Generate Outfit:</strong> Answer 11 questions for personalized recommendations</li>
+                            <li>📷 <strong>Analyze Image:</strong> Upload a photo for style feedback</li>
+                        </ul>
+                       
+                    </div>
+                    <div class="message-time">Just now</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Image Upload Area (hidden by default) -->
+        <div class="image-upload-area" id="imageUploadArea" style="display: none;">
+            <div class="upload-container">
+                <div class="upload-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <p>Upload an image to analyze</p>
+                <input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+                <div class="upload-buttons">
+                    <button class="btn btn-primary" onclick="document.getElementById('imageInput').click()">
+                        <i class="fas fa-file-upload"></i>
+                        Choose File
+                    </button>
+                    <button class="btn btn-secondary" onclick="openCamera()">
+                        <i class="fas fa-camera"></i>
+                        Use Camera
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Input -->
+        <div class="chat-input-container" id="chatInputContainer">
+            <div class="chat-input-wrapper">
+                <textarea 
+                    id="userInput" 
+                    class="chat-input" 
+                    placeholder="Type your answer or message here..."
+                    rows="1"
+                    maxlength="500"
+                ></textarea>
+                <button id="sendButton" class="btn-send" onclick="sendMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+            <div class="input-hint">
+                <span id="questionProgress">Workflow: Generate Outfit</span>
+                <span class="char-count"><span id="charCount">0</span>/500</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Guest Limit Modal -->
+<div id="guestLimitModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <i class="fas fa-lock"></i>
+            <h3>Feature Locked</h3>
+        </div>
+        <div class="modal-body">
+            <p>Saved outfits are available for registered users only.</p>
+            <p>Create a free account to:</p>
+            <ul>
+                <li>✅ Save your favorite outfits permanently</li>
+                <li>✅ Access them from any device</li>
+                <li>✅ Build your style profile</li>
+                <li>✅ Get better personalized recommendations</li>
+            </ul>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeGuestLimitModal()">Continue as Guest</button>
+            <a href="{{ url_for('auth.signup') }}" class="btn btn-primary">Sign Up Free</a>
+        </div>
+    </div>
+</div>
+
+<!-- Camera Modal -->
+<div id="cameraModal" class="modal" style="display: none;">
+    <div class="modal-content" style="max-width: 600px;">
+        <div class="modal-header">
+            <i class="fas fa-camera"></i>
+            <h3>Take a Photo</h3>
+            <button class="modal-close" onclick="closeCameraModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div style="text-align: center;">
+                <!-- Buttons ABOVE video -->
+                <div style="margin-bottom: 15px;">
+                    <button class="btn btn-success" onclick="captureFromModal()" style="margin-right: 10px;">
+                        <i class="fas fa-camera"></i>
+                        Capture Photo
+                    </button>
+                    <button class="btn btn-secondary" onclick="closeCameraModal()">
+                        <i class="fas fa-times"></i>
+                        Cancel
+                    </button>
+                </div>
+                <!-- Video stream -->
+                <video id="cameraStream" autoplay style="width: 100%; max-height: 400px; border-radius: 8px;"></video>
+                <canvas id="cameraCanvas" style="display: none;"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Load chatbot.js FIRST -->
+<script src="{{ url_for('static', filename='js/chatbot.js') }}"></script>
+
+<!-- Then add workflow-specific functions -->
+<script>
+// Set guest mode from backend
+const IS_GUEST = {{ 'true' if is_guest else 'false' }};
+
+// Workflow state
+let cameraStream = null;
+let currentWorkflow = 'generate';
+let outfitGenerated = false;
+
+// Guest modal functions
+function showGuestLimitModal() {
+    document.getElementById('guestLimitModal').style.display = 'flex';
+}
+
+function closeGuestLimitModal() {
+    document.getElementById('guestLimitModal').style.display = 'none';
+}
+
+// Hide/Show chat input container
+function hideChatInput() {
+    document.getElementById('chatInputContainer').style.display = 'none';
+}
+
+function showChatInput() {
+    document.getElementById('chatInputContainer').style.display = 'block';
+}
+
+// Workflow selection
+function selectWorkflow(workflow) {
+    currentWorkflow = workflow;
+    outfitGenerated = false;
+    
+    // Update UI
+    document.querySelectorAll('.workflow-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    document.querySelector(`[data-workflow="${workflow}"]`).classList.add('active');
+    
+    // Update progress and UI
+    const progressText = document.getElementById('questionProgress');
+    const imageArea = document.getElementById('imageUploadArea');
+    
+    if (workflow === 'generate') {
+        progressText.textContent = 'Workflow: Generate Outfit';
+        imageArea.style.display = 'none';
+        showChatInput();
+        
+        // Reset chat state for new workflow
+        chatState.currentQuestion = 1;
+        chatState.answers = {};
+        
+        displayBotMessage("Great! I'll ask you 11 questions to create your perfect outfit. Ready?");
+        
+        // Load first question
+        setTimeout(() => {
+            loadFirstQuestion();
+        }, 500);
+        
+    } else if (workflow === 'analyze') {
+        progressText.textContent = 'Workflow: Analyze Image';
+        imageArea.style.display = 'block';
+        hideChatInput();
+        displayBotMessage("Perfect! Upload an image of your outfit and I'll provide detailed style analysis and feedback.");
+    }
+}
+
+// Camera Functions
+function openCamera() {
+    if (cameraStream) {
+        cameraStream.getTracks().forEach(track => track.stop());
+    }
+    
+    document.getElementById('cameraModal').style.display = 'flex';
+    
+    navigator.mediaDevices.getUserMedia({ 
+        video: { 
+            facingMode: 'environment',
+            width: { ideal: 1280 },
+            height: { ideal: 720 }
+        }, 
+        audio: false 
+    })
+    .then(stream => {
+        cameraStream = stream;
+        const video = document.getElementById('cameraStream');
+        video.srcObject = stream;
+    })
+    .catch(error => {
+        console.error('Camera error:', error);
+        displayBotMessage('Could not access camera. Please check permissions or try file upload instead.');
+        closeCameraModal();
+    });
+}
+
+function captureFromModal() {
+    const video = document.getElementById('cameraStream');
+    const canvas = document.getElementById('cameraCanvas');
+    const context = canvas.getContext('2d');
+    
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    
+    canvas.toBlob(function(blob) {
+        const file = new File([blob], 'camera-photo.jpg', { type: 'image/jpeg' });
+        closeCameraModal();
+        simulateFileUpload(file);
+    }, 'image/jpeg', 0.9);
+}
+
+function closeCameraModal() {
+    if (cameraStream) {
+        cameraStream.getTracks().forEach(track => track.stop());
+        cameraStream = null;
+    }
+    document.getElementById('cameraModal').style.display = 'none';
+}
+
+function simulateFileUpload(file) {
+    const fakeEvent = {
+        target: { files: [file] }
+    };
+    displayUserMessage("📸 Photo captured from camera");
+    handleImageUpload(fakeEvent);
+}
+
+// Image Upload Handler
+function handleImageUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    const formData = new FormData();
+    formData.append('image', file);
+    
+    displayUserMessage(`Uploaded: ${file.name}`);
+    displayLoadingMessage();
+    
+    fetch('/chatbot/upload-image', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        removeLoadingMessage();
+        if (data.success) {
+            window.uploadedImagePath = data.image_path;
+            
+            displayBotMessage(`✅ Image uploaded successfully! I'll analyze your outfit.
+                <div class="image-preview" style="text-align: center; margin: 15px 0;">
+                    <img src="${data.image_path}" alt="Uploaded" style="max-width: 300px; border-radius: 8px; border: 3px solid #6366f1;">
+                </div>
+                <p><strong>Click below to analyze:</strong></p>
+                <div style="text-align: center;">
+                    <button class="option-btn" onclick="analyzeUploadedImage()" style="background: #6366f1; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;">
+                        <i class="fas fa-search"></i> Analyze This Outfit
+                    </button>
+                </div>`);
+        } else {
+            displayBotMessage(`❌ Error: ${data.error}`);
+        }
+    })
+    .catch(error => {
+        removeLoadingMessage();
+        displayBotMessage('❌ Failed to upload image. Please try again.');
+    });
+}
+
+// Image Analysis
+function analyzeUploadedImage() {
+    if (!window.uploadedImagePath) {
+        displayBotMessage('Please upload an image first.');
+        return;
+    }
+    
+    displayLoadingMessage();
+    
+    fetch('/chatbot/analyze-image', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            image_path: window.uploadedImagePath,
+            analysis_type: 'outfit_feedback',
+            generate_outfit: false
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        removeLoadingMessage();
+        if (data.success) {
+            let analysisHTML = `<strong>📸 Style Analysis:</strong><br><br>`;
+            analysisHTML += data.analysis.replace(/\n/g, '<br>');
+            
+            analysisHTML += `<br><br><strong>💡 Styling Tips:</strong><br><ul>`;
+            if (data.tips) {
+                data.tips.forEach(tip => {
+                    analysisHTML += `<li>${tip}</li>`;
+                });
+            } else {
+                analysisHTML += `<li>Consider adding accessories to complete the look</li>`;
+                analysisHTML += `<li>Check the color coordination of your outfit</li>`;
+                analysisHTML += `<li>Ensure the fit is appropriate for the occasion</li>`;
+            }
+            analysisHTML += `</ul>`;
+            
+            analysisHTML += `<br><div style="text-align: center; margin-top: 20px;">
+                
+                <button class="option-btn" onclick="showImageUploadOptions()" style="background: #6366f1; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;">
+                    <i class="fas fa-camera"></i> Analyze Another Image
+                </button>
+            </div>`;
+            
+            displayBotMessage(analysisHTML);
+        } else {
+            displayBotMessage(`❌ Analysis failed: ${data.error}`);
+        }
+    })
+    .catch(error => {
+        removeLoadingMessage();
+        displayBotMessage('❌ Failed to analyze image. Please try again.');
+    });
+}
+
+function enableFollowUpQuestions() {
+    showChatInput();
+    const userInput = document.getElementById('userInput');
+    userInput.disabled = false;
+    userInput.placeholder = "Ask a follow-up question about your outfit...";
+    displayBotMessage("💬 Sure! Ask me any questions about your outfit or style.");
+}
+
+function showImageUploadOptions() {
+    hideChatInput();
+    document.getElementById('imageUploadArea').style.display = 'block';
+    displayBotMessage("📸 Ready for another image! Upload or use your camera.");
+}
+
+// Override displayRecommendations from chatbot.js to add outfit generation complete behavior
+const originalDisplayRecommendations = window.displayRecommendations;
+window.displayRecommendations = function(recommendations, images, sdPrompt, recId) {
+    // Call original function
+    originalDisplayRecommendations(recommendations, images, sdPrompt, recId);
+    
+    // Set outfit generated flag and hide input
+    outfitGenerated = true;
+    hideChatInput();
+    
+    // Add action buttons
+    setTimeout(() => {
+        const actionHTML = `
+            <div class="message-group bot">
+                <div class="message-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        <p><strong>What would you like to do next?</strong></p>
+                        <div style="text-align: center; margin-top: 15px;">
+                            <button class="option-btn" onclick="modifyGeneratedOutfit()" style="background: #f59e0b; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; margin-right: 10px;">
+                                <i class="fas fa-edit"></i> Modify Outfit
+                            </button>
+                            <button class="option-btn" onclick="startNewChat()" style="background: #6366f1; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer;">
+                                <i class="fas fa-plus"></i> Start New Chat
+                            </button>
+                        </div>
+                    </div>
+                    <div class="message-time">Just now</div>
+                </div>
+            </div>
+        `;
+        
+        document.getElementById('chatMessages').insertAdjacentHTML('beforeend', actionHTML);
+        scrollToBottom();
+    }, 500);
+};
+
+function modifyGeneratedOutfit() {
+    outfitGenerated = false;
+    showChatInput();
+    displayBotMessage("What would you like to modify about your outfit? Please describe the changes.");
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+    // Ensure input is enabled for generate workflow
+    const userInput = document.getElementById('userInput');
+    if (userInput) {
+        userInput.disabled = false;
+    }
+});
+</script>
+{% endblock %}

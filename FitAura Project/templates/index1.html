@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+
+{% block title %}Outfit AI - Your Personal Style Assistant{% endblock %}
+
+{% block content %}
+<div class="landing-page">
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-sparkles"></i>
+                <span class="brand-text">Outfit<span class="brand-accent">AI</span></span>
+            </div>
+            <div class="nav-links">
+                <a href="{{ url_for('auth.login') }}" class="nav-link">Sign In</a>
+                <a href="{{ url_for('auth.signup') }}" class="btn btn-primary">Get Started</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-crown"></i>
+                    <span>AI-Powered Fashion Assistant</span>
+                </div>
+                <h1 class="hero-title">
+                    Your Personal
+                    <span class="gradient-text">Style Expert</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Get personalized outfit recommendations powered by advanced AI. 
+                    Answer 10 simple questions and discover your perfect style.
+                </p>
+                <div class="hero-buttons">
+                    <a href="{{ url_for('auth.signup') }}" class="btn btn-primary btn-large">
+                        <span>Start Styling</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <a href="#features" class="btn btn-secondary btn-large">
+                        <span>Learn More</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-number">10K+</div>
+                        <div class="stat-label">Outfits Generated</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">5K+</div>
+                        <div class="stat-label">Happy Users</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">4.9â˜…</div>
+                        <div class="stat-label">User Rating</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="floating-card card-1">
+                    <i class="fas fa-tshirt"></i>
+                    <p>Casual Style</p>
+                </div>
+                <div class="floating-card card-2">
+                    <i class="fas fa-user-tie"></i>
+                    <p>Professional</p>
+                </div>
+                <div class="floating-card card-3">
+                    <i class="fas fa-gem"></i>
+                    <p>Elegant</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="features-container">
+            <div class="section-header">
+                <h2 class="section-title">How It Works</h2>
+                <p class="section-subtitle">Three simple steps to your perfect outfit</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3 class="feature-title">Chat with AI</h3>
+                    <p class="feature-description">
+                        Answer 10 personalized questions about your style preferences, 
+                        occasion, and budget through our intelligent chatbot.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <h3 class="feature-title">AI Analysis</h3>
+                    <p class="feature-description">
+                        Our advanced AI analyzes your preferences and generates 
+                        custom outfit recommendations tailored just for you.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-images"></i>
+                    </div>
+                    <h3 class="feature-title">Visual Results</h3>
+                    <p class="feature-description">
+                        Receive detailed outfit suggestions with AI-generated images 
+                        to visualize your perfect look.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits">
+        <div class="benefits-container">
+            <div class="benefits-content">
+                <h2 class="section-title">Why Choose OutfitAI?</h2>
+                <div class="benefits-list">
+                    <div class="benefit-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>Personalized Recommendations</h4>
+                            <p>Every suggestion is tailored to your unique style and preferences</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>AI-Powered Intelligence</h4>
+                            <p>Cutting-edge AI technology for accurate fashion advice</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>Visual Inspiration</h4>
+                            <p>See your outfits come to life with AI-generated images</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>Save & Revisit</h4>
+                            <p>Store your favorite recommendations for future reference</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="benefits-visual">
+                <div class="mockup-chat">
+                    <div class="chat-header">
+                        <div class="chat-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="chat-info">
+                            <div class="chat-name">Style Assistant</div>
+                            <div class="chat-status">Online</div>
+                        </div>
+                    </div>
+                    <div class="chat-messages">
+                        <div class="message bot-message">
+                            <p>What's the occasion for your outfit?</p>
+                        </div>
+                        <div class="message user-message">
+                            <p>Business meeting</p>
+                        </div>
+                        <div class="message bot-message">
+                            <p>Great! I have the perfect outfit for you...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="cta-container">
+            <h2 class="cta-title">Ready to Transform Your Style?</h2>
+            <p class="cta-subtitle">Join thousands of users who found their perfect outfit with AI</p>
+            <a href="{{ url_for('auth.signup') }}" class="btn btn-primary btn-large">
+                <span>Get Started Now</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <i class="fas fa-sparkles"></i>
+                <span>Outfit<span class="brand-accent">AI</span></span>
+            </div>
+            <div class="footer-text">
+                <p>&copy; 2025 OutfitAI. Powered by Google Gemini AI.</p>
+            </div>
+        </div>
+    </footer>
+</div>
+{% endblock %}

@@ -1,0 +1,264 @@
+{% extends "base.html" %}
+
+{% block title %}Image Analysis - FitAura{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/chatbot.css') }}">
+<style>
+.chat-input-wrapper {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+}
+
+.input-attachment-btns {
+    display: flex;
+    gap: 5px;
+}
+
+.input-attachment-btn {
+    background: transparent;
+    border: 2px solid #37d4d4;
+    color: #37c2d4;
+    width: 42px;
+    height: 42px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: all 0.3s;
+    flex-shrink: 0;
+}
+
+.input-attachment-btn:hover {
+    background: #37bcd4;
+    color: #000;
+}
+
+.camera-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+}
+
+.camera-modal.active {
+    display: flex;
+}
+
+.camera-container {
+    background: #1a1a1a;
+    border: 2px solid #37c9d4;
+    border-radius: 16px;
+    padding: 20px;
+    max-width: 90%;
+}
+
+.camera-container video {
+    width: 100%;
+    max-width: 640px;
+    border-radius: 12px;
+}
+
+.camera-controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.camera-controls button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.btn-capture {
+    background: #37d4d4;
+    color: #000;
+}
+
+.btn-capture:hover {
+    background: #3fd0f4;
+}
+
+.btn-cancel-cam {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-cancel-cam:hover {
+    background: #c82333;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="chatbot-page">
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <a href="{{ url_for('index') }}" class="brand-logo">
+                <i class="fas fa-sparkles"></i>
+                <span>Fit<span class="brand-accent">Aura</span></span>
+            </a>
+        </div>
+
+        <div class="sidebar-user">
+            <div class="user-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="user-info">
+                <div class="user-name">{{ current_user.username if current_user.is_authenticated else session.get('guest_username', 'Guest') }}</div>
+                <div class="user-status">
+                    <span class="status-dot"></span>
+                    <span>Online</span>
+                </div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="{{ url_for('chatbot.chat_interface') }}" class="nav-item">
+                <i class="fas fa-magic"></i>
+                <span>Generate Outfit</span>
+            </a>
+            <a href="{{ url_for('chatbot.image_analysis') }}" class="nav-item active">
+                <i class="fas fa-camera"></i>
+                <span>Image Analysis</span>
+            </a>
+            {% if current_user.is_authenticated %}
+            <a href="{{ url_for('recommendations.view_recommendations') }}" class="nav-item">
+                <i class="fas fa-bookmark"></i>
+                <span>Saved Outfits</span>
+            </a>
+            <a href="{{ url_for('recommendations.profile') }}" class="nav-item">
+                <i class="fas fa-user-circle"></i>
+                <span>Profile</span>
+            </a>
+            {% else %}
+            <a href="{{ url_for('auth.signup') }}" class="nav-item">
+                <i class="fas fa-user-plus"></i>
+                <span>Sign Up to Save</span>
+            </a>
+            {% endif %}
+        </nav>
+
+        <div class="sidebar-footer">
+            {% if current_user.is_authenticated %}
+            <a href="{{ url_for('auth.logout') }}" class="nav-item logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+            {% else %}
+            <a href="{{ url_for('auth.login') }}" class="nav-item">
+                <i class="fas fa-sign-in-alt"></i>
+                <span>Sign In</span>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="chat-main">
+        <div class="chat-header">
+            <div class="chat-header-content">
+                <div class="bot-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="bot-info">
+                    <h2 class="bot-name">Image Analysis</h2>
+                    <p class="bot-status">
+                        <span class="typing-indicator" style="display: none;">
+                            <span></span><span></span><span></span>
+                        </span>
+                        <span class="status-text">Upload or capture outfit images for AI-powered fashion analysis</span>
+                    </p>
+                </div>
+            </div>
+            <div class="chat-actions">
+                <button class="btn-icon" onclick="clearChat()" title="Clear Chat">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+            <div class="message-group bot">
+                <div class="message-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        <p>👋 Welcome to Image Analysis!</p>
+                        <p>I can help you with:</p>
+                        <p>• 📤 <strong>Upload outfit photos</strong> for detailed style analysis<br>
+                        • 📸 <strong>Capture live photos</strong> for instant feedback<br>
+                        • 💬 <strong>Ask follow-up questions</strong> about your outfits<br>
+                        • 🎨 <strong>Get styling recommendations</strong> based on what you're wearing</p>
+                        <p>Use the buttons below to get started!</p>
+                    </div>
+                    <div class="message-time">Just now</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-input-container">
+            <div class="chat-input-wrapper">
+                <div class="input-attachment-btns">
+                    <button class="input-attachment-btn" onclick="openCameraModal()" title="Open Camera">
+                        <i class="fas fa-camera"></i>
+                    </button>
+                    
+                    <button class="input-attachment-btn" onclick="document.getElementById('fileInput').click()" title="Upload Image">
+                        <i class="fas fa-image"></i>
+                    </button>
+                </div>
+                
+                <textarea 
+                    id="userInput" 
+                    class="chat-input" 
+                    placeholder="Upload an image or ask me questions..."
+                    rows="1"
+                    maxlength="500"
+                ></textarea>
+                
+                <button id="sendButton" class="btn-send" onclick="sendMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+            <div class="input-hint">
+                <span id="questionProgress">Image Analysis Mode</span>
+                <span class="char-count"><span id="charCount">0</span>/500</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="camera-modal" id="cameraModal">
+    <div class="camera-container">
+        <video id="cameraVideo" autoplay playsinline></video>
+        <div class="camera-controls">
+            <button class="btn-capture" onclick="capturePhoto()">
+                <i class="fas fa-camera"></i> Capture
+            </button>
+            <button class="btn-cancel-cam" onclick="closeCameraModal()">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+        </div>
+    </div>
+</div>
+
+<input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+<canvas id="captureCanvas" style="display: none;"></canvas>
+
+<script src="{{ url_for('static', filename='js/image-analysis.js') }}"></script>
+{% endblock %}

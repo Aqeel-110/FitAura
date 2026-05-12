@@ -1,0 +1,177 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is your gender?",
+      "type": "multiple_choice",
+      "options": [
+        "Male",
+        "Female",
+        "Prefer not to say"
+      ],
+      "validation": {
+        "required": true,
+        "type": "option_select"
+      }
+    },
+    {
+      "id": 2,
+      "question": "What is the occasion for your outfit?",
+      "type": "multiple_choice",
+      "options": [
+        "Casual everyday wear",
+        "Formal event (wedding, gala)",
+        "Business/Professional",
+        "Party/Night out",
+        "Sports/Gym",
+        "Beach/Vacation",
+        "Date night"
+      ],
+      "validation": {
+        "required": true,
+        "type": "option_select"
+      }
+    },
+    {
+      "id": 3,
+      "question": "What is your preferred style?",
+      "type": "multiple_choice",
+      "options": [
+        "Modern/Contemporary",
+        "Classic/Traditional",
+        "Bohemian/Boho",
+        "Minimalist",
+        "Streetwear/Urban",
+        "Vintage/Retro",
+        "Elegant/Sophisticated"
+      ],
+      "validation": {
+        "required": true,
+        "type": "option_select"
+      }
+    },
+    {
+      "id": 4,
+      "question": "What are your preferred colors? (You can mention multiple colors)",
+      "type": "text",
+      "placeholder": "e.g., Black, White, Navy Blue, Red",
+      "validation": {
+        "required": true,
+        "type": "text",
+        "min_length": 3,
+        "max_length": 100
+      }
+    },
+    {
+      "id": 5,
+      "question": "What is your body type?",
+      "type": "multiple_choice",
+      "options": [
+        "Slim/Petite",
+        "Athletic/Fit",
+        "Curvy/Hourglass",
+        "Plus size",
+        "Tall",
+        "Average",
+        "Prefer not to say"
+      ],
+      "validation": {
+        "required": true,
+        "type": "option_select"
+      }
+    },
+    {
+      "id": 6,
+      "question": "What is the current weather/season?",
+      "type": "multiple_choice",
+      "options": [
+        "Summer (Hot)",
+        "Winter (Cold)",
+        "Spring (Mild)",
+        "Fall/Autumn (Cool)",
+        "Rainy",
+        "Tropical"
+      ],
+      "validation": {
+        "required": true,
+        "type": "option_select"
+      }
+    },
+    {
+      "id": 7,
+      "question": "What is your budget range?",
+      "type": "multiple_choice",
+      "options": [
+        "Budget-friendly (Under $50)",
+        "Moderate ($50-$150)",
+        "Mid-range ($150-$300)",
+        "Premium ($300-$500)",
+        "Luxury ($500+)",
+        "No specific budget"
+      ],
+      "validation": {
+        "required": true,
+        "type": "option_select"
+      }
+    },
+    {
+      "id": 8,
+      "question": "What type of clothing do you prefer?",
+      "type": "multiple_choice",
+      "options": [
+        "Dresses/Skirts",
+        "Pants/Jeans",
+        "Shorts",
+        "Traditional wear",
+        "Mix of both casual and formal",
+        "Comfortable loungewear"
+      ],
+      "validation": {
+        "required": true,
+        "type": "option_select"
+      }
+    },
+    {
+      "id": 9,
+      "question": "Do you have any specific patterns or prints you like?",
+      "type": "text",
+      "placeholder": "e.g., Floral, Stripes, Solid colors, Polka dots, Animal print",
+      "validation": {
+        "required": false,
+        "type": "text",
+        "min_length": 0,
+        "max_length": 100
+      }
+    },
+    {
+      "id": 10,
+      "question": "What accessories do you prefer with your outfit?",
+      "type": "multiple_choice",
+      "options": [
+        "Minimal accessories",
+        "Statement jewelry",
+        "Scarves/Hats",
+        "Bags/Purses",
+        "Watches",
+        "Sunglasses",
+        "All of the above"
+      ],
+      "validation": {
+        "required": true,
+        "type": "option_select"
+      }
+    },
+    {
+      "id": 11,
+      "question": "Any specific preferences or requirements? (Optional)",
+      "type": "text",
+      "placeholder": "e.g., Prefer sustainable fashion, need modest clothing, allergic to certain fabrics",
+      "validation": {
+        "required": false,
+        "type": "text",
+        "min_length": 0,
+        "max_length": 200
+      }
+    }
+  ]
+}

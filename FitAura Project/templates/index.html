@@ -1,0 +1,266 @@
+{% extends "base.html" %}
+
+{% block title %}{{ app_name }} - {{ app_tagline }}{% endblock %}
+
+{% block content %}
+<div class="landing-page">
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-sparkles"></i>
+                <span class="brand-text">Fit<span class="brand-accent">Aura</span></span>
+            </div>
+            <div class="nav-links">
+                <a href="{{ url_for('auth.login') }}" class="nav-link">Sign In</a>
+                <a href="{{ url_for('auth.signup') }}" class="btn btn-primary">Get Started</a>
+                <button onclick="guestLogin()" class="btn btn-secondary">Try as Guest</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-crown"></i>
+                    <span>AI-Powered Fashion Assistant</span>
+                </div>
+                <h1 class="hero-title">
+                    Your Personal
+                    <span class="gradient-text">Style Companion</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Get personalized outfit recommendations powered by advanced AI. 
+                    5 powerful workflows to transform your style journey.
+                </p>
+                <div class="hero-buttons">
+                    <a href="{{ url_for('auth.signup') }}" class="btn btn-primary btn-large">
+                        <span>Start Styling</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <button onclick="guestLogin()" class="btn btn-secondary btn-large">
+                        <span>Try as Guest</span>
+                        <i class="fas fa-user-circle"></i>
+                    </button>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-number">15K+</div>
+                        <div class="stat-label">Outfits Generated</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">8K+</div>
+                        <div class="stat-label">Happy Users</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">4.9★</div>
+                        <div class="stat-label">User Rating</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="floating-card card-1">
+                    <i class="fas fa-tshirt"></i>
+                    <p>Generate Outfits</p>
+                </div>
+                <div class="floating-card card-2">
+                    <i class="fas fa-palette"></i>
+                    <p>Modify Styles</p>
+                </div>
+                <div class="floating-card card-3">
+                    <i class="fas fa-camera"></i>
+                    <p>Analyze Images</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="features-container">
+            <div class="section-header">
+                <h2 class="section-title">Powerful AI Workflows</h2>
+                <p class="section-subtitle">Everything you need for perfect style</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <h3 class="feature-title">Generate New Outfits</h3>
+                    <p class="feature-description">
+                        Answer 11 simple questions and get AI-generated outfit recommendations 
+                        with professional images tailored to your style.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <h3 class="feature-title">Modify & Customize</h3>
+                    <p class="feature-description">
+                        Change colors, styles, or items instantly. Try "make it blue" 
+                        or "different shoes" and see new variations immediately.
+                    </p>
+                </div>
+                <!-- <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3 class="feature-title">Ask Follow-up Questions</h3>
+                    <p class="feature-description">
+                        Get styling advice, pairing suggestions, and occasion guidance 
+                        for your generated outfits through natural conversation.
+                    </p>
+                </div> -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                    <h3 class="feature-title">Analyze Your Images</h3>
+                    <p class="feature-description">
+                        Upload photos of your outfits to get expert AI feedback, 
+                        style analysis, and improvement suggestions.
+                    </p>
+                </div>
+                <!-- <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-clone"></i>
+                    </div>
+                    <h3 class="feature-title">Generate from Images</h3>
+                    <p class="feature-description"> -->
+                        <!-- See an outfit you love? Upload it and FitAura will create 
+                        similar recommendations based on the style.
+                    </p>
+                </div>
+            </div> -->
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits">
+        <div class="benefits-container">
+            <div class="benefits-content">
+                <h2 class="section-title">Why Choose FitAura?</h2>
+                <div class="benefits-list">
+                    <div class="benefit-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>Personalized AI Recommendations</h4>
+                            <p>Every suggestion tailored to your unique style preferences</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>Stable Diffusion Image Generation</h4>
+                            <p>Professional fashion images generated by cutting-edge AI</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>Multi-Modal AI Intelligence</h4>
+                            <p>Text generation, image analysis, and smart intent detection</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>Guest Mode Available</h4>
+                            <p>Try all features without signup - data stored in your browser</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>Save & Revisit (Registered Users)</h4>
+                            <p>Create an account to permanently save your favorite outfits</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="benefits-visual">
+                <div class="mockup-chat">
+                    <div class="chat-header">
+                        <div class="chat-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="chat-info">
+                            <div class="chat-name">FitAura AI</div>
+                            <div class="chat-status">Online</div>
+                        </div>
+                    </div>
+                    <div class="chat-messages">
+                        <div class="message bot-message">
+                            <p>What's the occasion for your outfit?</p>
+                        </div>
+                        <div class="message user-message">
+                            <p>Business meeting</p>
+                        </div>
+                        <div class="message bot-message">
+                            <p>Perfect! Generating your professional outfit...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="cta-container">
+            <h2 class="cta-title">Ready to Transform Your Style?</h2>
+            <p class="cta-subtitle">Join thousands who discovered their perfect style with FitAura</p>
+            <div class="cta-buttons">
+                <a href="{{ url_for('auth.signup') }}" class="btn btn-primary btn-large">
+                    <span>Create Account</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+                <button onclick="guestLogin()" class="btn btn-secondary btn-large">
+                    <span>Continue as Guest</span>
+                    <i class="fas fa-user-circle"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <i class="fas fa-sparkles"></i>
+                <span>Fit<span class="brand-accent">Aura</span></span>
+            </div>
+            <div class="footer-text">
+                <p>&copy; 2025 FitAura. Powered by Gemini AI & Stable Diffusion.</p>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<script>
+function guestLogin() {
+    fetch('/auth/guest-login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            window.location.href = data.redirect;
+        } else {
+            alert('Failed to create guest session');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred');
+    });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}500 - Server Error{% endblock %}
+
+{% block content %}
+<div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--primary-bg); padding: 2rem;">
+    <div style="text-align: center; max-width: 600px;">
+        <div style="font-size: 8rem; font-weight: 700; background: linear-gradient(135deg, var(--error-color), #ff6b6b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem;">
+            500
+        </div>
+        <h1 style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--text-primary);">Internal Server Error</h1>
+        <p style="color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 2rem;">
+            Something went wrong on our end. We're working to fix it. Please try again later.
+        </p>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <a href="{{ url_for('index') }}" class="btn btn-primary">
+                <i class="fas fa-home"></i>
+                <span>Go Home</span>
+            </a>
+            <button onclick="location.reload()" class="btn btn-secondary">
+                <i class="fas fa-redo"></i>
+                <span>Refresh Page</span>
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
