@@ -1,10 +1,29 @@
 # FitAura
 
-FitAura is an AI-driven personalized outfit recommendation system designed to help users discover clothing styles that match their preferences, occasion, mood, weather, and fashion needs through an interactive chatbot experience. The project combines Natural Language Processing (NLP) for understanding user input and intelligent conversation with Generative Adversarial Networks (GANs) for generating fashion-oriented visual recommendations, making the styling process more engaging, smart, and personalized. (Project of 2)
+FitAura is an AI-driven personalized outfit recommendation system designed to help users discover clothing styles that match their preferences, occasion, mood, weather, and fashion needs through an interactive chatbot experience. The project combines Natural Language Processing (NLP) for understanding user input and intelligent conversation with Stable Diffusion (a diffusion-based generative model) for generating fashion-oriented visual recommendations, making the styling process more engaging, smart, and personalized. (Project of 2)
 
 ## Project Timeline
 - **Creation Date**: November 2025
 - **Refinements**: December 2025, May 2026
+
+## Screenshots
+
+**Landing Page**
+![](<FitAura Project/screenshots/landing_page.jpeg>)
+
+**Chat Welcome**
+![](<FitAura Project/screenshots/chat_welcome.jpeg>)
+
+**Chat Occasion**
+![](<FitAura Project/screenshots/chat_occasion.jpeg>)
+
+**Chat Style**
+![](<FitAura Project/screenshots/chat_style.jpeg>)
+
+**Outfit Result**
+![](<FitAura Project/screenshots/outfit_result.jpeg>)
+
+> *Note: Only key screens shown. The full flow includes 11 questions before generating the outfit.*
 
 ## Key Features
 - **Personalized Outfit Recommendations**  
@@ -17,7 +36,7 @@ FitAura is an AI-driven personalized outfit recommendation system designed to he
   Uses NLP techniques to analyze user input and understand intent more accurately.
 
 - **Visual Outfit Generation**  
-  Integrates GAN-based generation to create fashion-oriented outfit visuals based on user needs.
+  Integrates Stable Diffusion to create fashion-oriented outfit visuals based on user needs.
 
 - **Context-Aware Suggestions**  
   Considers multiple real-life factors such as body attributes, emotional tone, and event type for better recommendations.
@@ -43,9 +62,9 @@ FitAura is an AI-driven personalized outfit recommendation system designed to he
 
 5. **Interact with the chatbot**  
    Type a request such as:
-   - “Suggest an outfit for a formal event”
-   - “What should I wear for a beach trip?”
-   - “Recommend something casual for rainy weather”
+   - "Suggest an outfit for a formal event"
+   - "What should I wear for a beach trip?"
+   - "Recommend something casual for rainy weather"
 
 6. **Let the AI process the request**  
    The NLP module analyzes the text, extracts user intent, and maps the input to suitable fashion recommendations.
